@@ -10,13 +10,15 @@
 		JOIN genres ON books.FK_genres=genres.id
 		JOIN age_recommendations ON books.FK_age_recommendations=age_recommendations.id 
 		JOIN libraries ON books.FK_libraries=libraries.id
-		JOIN books_tags ON books.id=books_tags.FK_books
-		JOIN tags ON books_tags.FK_tags=tags.id
+		LEFT JOIN books_tags ON books.id=books_tags.FK_books
+		LEFT JOIN tags ON books_tags.FK_tags=tags.id
 		WHERE title LIKE '%$search%'
 		OR first_name LIKE '%$search%'
 		OR family_name LIKE '%$search%'
 		OR genre LIKE '%$search%'
 		OR publishing_year LIKE '%$search%'
 		OR tag LIKE '%$search%'
+		
+		GROUP BY books_id
 		ORDER BY title ASC");
 ?>

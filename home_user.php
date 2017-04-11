@@ -83,7 +83,8 @@ require_once('includes/while_loop_home_user.php');
 					JOIN authors ON books.FK_authors=authors.id
 					JOIN genres ON books.FK_genres=genres.id
 					JOIN age_recommendations ON books.FK_age_recommendations=age_recommendations.id 
-					JOIN libraries ON books.FK_libraries=libraries.id 
+					JOIN libraries ON books.FK_libraries=libraries.id
+					GROUP BY books_id 
 					ORDER BY title ASC");
 				
 				

@@ -2,6 +2,23 @@
 require_once('includes/start_session_admin.php');
 ?>
 <?php
+$user_id = $_GET['user_id'];
+if (!empty($user_id)) {
+
+		$query_add_admin = "INSERT INTO admins(FK_users) VALUES($user_id)";
+				$res_add_admin = mysql_query($query_add_admin);
+		
+		if ($res_add_admin) {
+		$errTyp = "alert alert-success";
+		$errMSG = "You successfully added a new admin!";
+		// echo $errMSG;
+		unset($user_id);
+		} else {
+		$errTyp = "alert alert-danger";
+		$errMSG = "Something went wrong, try again later...";
+		// echo $errMSG;
+		}
+	}
 	
 ?>
 <!DOCTYPE html>
@@ -73,6 +90,7 @@ require_once('includes/alert_box.php');
 			        <th>Last Name</th>
 			        <th>E-Mail</th>
 			        <th>Member since</th>
+			        <th>Give Admin-Rights</th>
 			      </tr>
 			    </thead>
 			    <tbody>
@@ -84,8 +102,9 @@ require_once('includes/alert_box.php');
 			 		$search = strip_tags($search);
 			  		$search = htmlspecialchars($search);
 					$res_user=mysql_query("SELECT 
-					username, first_name, family_name, email, member_since
+					username, first_name, family_name, email, member_since, admins.id AS admin_id, users.id AS user_id
 					FROM users
+					LEFT JOIN admins ON users.id=admins.FK_users
 					WHERE username LIKE '%$search%'
 					OR first_name LIKE '%$search%'
 					OR family_name LIKE '%$search%'
@@ -110,6 +129,8 @@ require_once('includes/alert_box.php');
 				  		$family_name = $userRow['family_name'];
 				  		$email = $userRow['email'];
 				  		$member_since = $userRow['member_since'];
+				  		$admin_id = $userRow['admin_id'];
+				  		$user_id = $userRow['user_id'];
 
 				  	
 				  		echo 	'<tr> 
@@ -118,13 +139,26 @@ require_once('includes/alert_box.php');
 									<td>'.$family_name.'</td>
 									<td>'.$email.'</td>
 									<td>'.$member_since.'</td>
+									<td>';
+
+						if (empty($admin_id)) {
+							echo '<form method="post" action="all_users_admin.php?user_id='.$user_id.'">
+											<input type="submit" class="btn btn-primary" value="Give Admin-Rights" id="btn-give_admin_rights" name="btn-give_admin_rights">
+										</form>
+						  	';
+						} else {
+							echo '';
+						}
+						echo '</td>
 								</tr>';
 			  		}
 				} else {
 
 					$res_user=mysql_query("SELECT 
-					username, first_name, family_name, email, member_since
+					username, first_name, family_name, email, member_since, admins.id AS admin_id, users.id AS user_id
 					FROM users
+					LEFT JOIN admins ON users.id=admins.FK_users
+
 					ORDER BY username ASC");
 
 					
@@ -134,6 +168,8 @@ require_once('includes/alert_box.php');
 				  		$family_name = $userRow['family_name'];
 				  		$email = $userRow['email'];
 				  		$member_since = $userRow['member_since'];
+				  		$admin_id = $userRow['admin_id'];
+				  		$user_id = $userRow['user_id'];
 				  	
 				  		echo 	'<tr> 
 									<td>'.$username.'</td>
@@ -141,6 +177,17 @@ require_once('includes/alert_box.php');
 									<td>'.$family_name.'</td>
 									<td>'.$email.'</td>
 									<td>'.$member_since.'</td>
+									<td>';
+
+						if (empty($admin_id)) {
+							echo '<form method="post" action="all_users_admin.php?user_id='.$user_id.'">
+											<input type="submit" class="btn btn-primary" value="Give Admin-Rights" id="btn-give_admin_rights" name="btn-give_admin_rights">
+										</form>
+						  	';
+						} else {
+							echo '';
+						}
+						echo '</td>
 								</tr>';
 			  		}
   				}

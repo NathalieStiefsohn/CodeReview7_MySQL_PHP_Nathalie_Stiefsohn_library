@@ -115,8 +115,8 @@ require_once('includes/alert_box.php');
 					JOIN authors ON books.FK_authors=authors.id
 					JOIN genres ON books.FK_genres=genres.id
 					JOIN age_recommendations ON books.FK_age_recommendations=age_recommendations.id
-					JOIN books_tags ON books.id=books_tags.FK_books
-					JOIN tags ON books_tags.FK_tags=tags.id
+					LEFT JOIN books_tags ON books.id=books_tags.FK_books
+					LEFT JOIN tags ON books_tags.FK_tags=tags.id
 					LEFT JOIN borrows ON books.id = borrows.FK_books
                     LEFT JOIN users ON borrows.FK_users=users.id 
  					
@@ -126,6 +126,7 @@ require_once('includes/alert_box.php');
 					OR genre LIKE '%$search%'
 					OR publishing_year LIKE '%$search%'
 					OR tag LIKE '%$search%'
+					GROUP BY books.id
 					ORDER BY title ASC");
 					// get telephone number
 					$res_library=mysql_query("SELECT * FROM libraries");
