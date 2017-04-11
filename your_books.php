@@ -36,7 +36,8 @@ require_once('includes/head_tag.php');
 	?>
 </head>
 <body>
-<div class="container">
+<div id="wrap">
+  <div id="main" class="container clear-top">
 
 
 	<div class="navbar navbar-inverse navbar-fixed-top">	

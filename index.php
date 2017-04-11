@@ -87,7 +87,9 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster+Two" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
+  <div id="wrap">
+  <div id="main" class="container clear-top">
+  
   <header class="row shadow">
     <div class="col-xs-6">
       <span><img id="logo" src="pictures/logo.png" alt="logo"></span>
@@ -133,13 +135,14 @@
 
     </div>
 
-  <!-- footer -->
-    <div class="row margin-top ">
-        <div class="col-xs-12 text-center shadow panel panel-default">
-          All rights reserved for Nati
-        </div>
-    </div>
+<!-- end wrapper to put footer on the bottom of the page -->
   </div>
+</div>
+  <!-- footer -->
+  <?php
+require_once('includes/footer.php');
+  ?>
+   
 </body>
 </html>
 <?php ob_end_flush(); ?>

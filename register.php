@@ -171,7 +171,9 @@
     </style>
 </head>
 <body>
-    <div class="container">
+<div id="wrap">
+  <div id="main" class="container clear-top">
+
     <header class="row shadow">
     <div class="col-xs-6">
       <span><img id="logo" src="pictures/logo.png" alt="logo"></span>
@@ -248,15 +250,15 @@
         </form>
       </div>
       </div>
-      <!-- footer -->
-    <div class="row margin-top ">
-        <div class="col-xs-12 text-center shadow panel panel-default">
-          All rights reserved for Nati
-        </div>
-    </div>
-    </div>
-    <script type="text/javascript" src="js/register.js"></script>
-</body>
+<!-- end wrapper to put footer on the bottom of the page -->
+  </div>
+</div>
+  <!-- footer -->
+  <?php
+require_once('includes/footer.php');
+  ?>
+<script type="text/javascript" src="js/register.js"></script>
 
+</body>
 </html>
 <?php ob_end_flush(); ?>
