@@ -1,16 +1,5 @@
 <?php
- ob_start();
- session_start();
- require_once 'dbconnect.php';
- 
- // if session is not set this will redirect to login page
- if( !isset($_SESSION['admin']) ) {
-  header("Location: index.php");
-  exit;
- }
- // select logged-in users detail
- $res=mysql_query("SELECT * FROM users WHERE id=".$_SESSION['admin']);
- $userRow=mysql_fetch_array($res);
+require_once('includes/start_session_admin.php');
 ?>
 <?php
 // validation ADD BOOK
@@ -60,6 +49,24 @@
 			$image = trim($_POST['image']);
 			$image = strip_tags($image);
 			$image = htmlspecialchars($image);
+			
+			// tags
+			$tag1 = trim($_POST['tag1']);
+			$tag1 = strip_tags($tag1);
+			$tag1 = htmlspecialchars($tag1);
+
+			$tag2 = trim($_POST['tag2']);
+			$tag2 = strip_tags($tag2);
+			$tag2 = htmlspecialchars($tag2);
+
+			$tag3 = trim($_POST['tag3']);
+			$tag3 = strip_tags($tag3);
+			$tag3 = htmlspecialchars($tag3);
+
+			$tag4 = trim($_POST['tag4']);
+			$tag4 = strip_tags($tag4);
+			$tag4 = htmlspecialchars($tag4);
+
 		 
 		  // prevent sql injections / clear user invalid inputs
 		  $error_add_book = 0;	
@@ -88,14 +95,119 @@
 				   $error_add_author = 1;
 				   $imageError = "Please enter the image link.";
 			  	} 
+
+
+
+			
+			
 			// if there's no error, continue to save in db
 			if( $error_add_book == 0 ) {
 				$query_add_book = "INSERT INTO books(title, FK_authors, FK_genres, publishing_year, FK_age_recommendations, image) VALUES('$title', $author_FK, $genre_FK, $publishing_year, $age_FK, '$image')";
 				$res_add_book = mysql_query($query_add_book);
+				$id_book = mysql_insert_id();
+
+				//TAGS
+				//TAG1
+			if(!empty($tag1)){
+
+				// check whether the tag exists or not
+			   $query_tag_exists = "SELECT * FROM tags WHERE tags.tag='$tag1'";
+			   $result_tag_exists = mysql_query($query_tag_exists);
+			   $count_tag_exists = mysql_num_rows($result_tag_exists);
+			   // either way we get the tag's id
+			   if($count_tag_exists!=0){
+			   		$tagRow=mysql_fetch_array($result_tag_exists);
+			   		$id_tag1 = $tagRow['id'];
+			   } else {
+
+			   	// insert tag into tags table
+				$query_tag1 = "INSERT INTO tags(tag) VALUES('$tag1')";
+				$res_tag1 = mysql_query($query_tag1);
+				$id_tag1 = mysql_insert_id();
+				}
+
+				// create entry in table books_tags
+				$query_books_tags1 = "INSERT INTO books_tags(FK_tags, FK_books) VALUES($id_tag1, $id_book)";
+				$res_books_tags1 = mysql_query($query_books_tags1);
+
+		  	} 
+			//TAG2
+			if(!empty($tag2)){
+
+				// check whether the tag exists or not
+			   $query_tag_exists = "SELECT * FROM tags WHERE tags.tag='$tag2'";
+			   $result_tag_exists = mysql_query($query_tag_exists);
+			   $count_tag_exists = mysql_num_rows($result_tag_exists);
+			   // either way we get the tag's id
+			   if($count_tag_exists!=0){
+			   		$tagRow=mysql_fetch_array($result_tag_exists);
+			   		$id_tag2 = $tagRow['id'];
+			   } else {
+
+			   	// insert tag into tags table
+				$query_tag2 = "INSERT INTO tags(tag) VALUES('$tag2')";
+				$res_tag2 = mysql_query($query_tag2);
+				$id_tag2 = mysql_insert_id();
+				}
+
+				// create entry in table books_tags
+				$query_books_tags2 = "INSERT INTO books_tags(FK_tags, FK_books) VALUES($id_tag2, $id_book)";
+				$res_books_tags2 = mysql_query($query_books_tags2);
+
+		  	}
+			//TAG3
+			if(!empty($tag3)){
+
+				// check whether the tag exists or not
+			   $query_tag_exists = "SELECT * FROM tags WHERE tags.tag='$tag3'";
+			   $result_tag_exists = mysql_query($query_tag_exists);
+			   $count_tag_exists = mysql_num_rows($result_tag_exists);
+			   // either way we get the tag's id
+			   if($count_tag_exists!=0){
+			   		$tagRow=mysql_fetch_array($result_tag_exists);
+			   		$id_tag3 = $tagRow['id'];
+			   } else {
+
+			   	// insert tag into tags table
+				$query_tag3 = "INSERT INTO tags(tag) VALUES('$tag3')";
+				$res_tag3 = mysql_query($query_tag3);
+				$id_tag3 = mysql_insert_id();
+				}
+
+				// create entry in table books_tags
+				$query_books_tags3 = "INSERT INTO books_tags(FK_tags, FK_books) VALUES($id_tag3, $id_book)";
+				$res_books_tags3 = mysql_query($query_books_tags3);
+
+		  	}
+			//TAG4
+			if(!empty($tag4)){
+
+				// check whether the tag exists or not
+			   $query_tag_exists = "SELECT * FROM tags WHERE tags.tag='$tag4'";
+			   $result_tag_exists = mysql_query($query_tag_exists);
+			   $count_tag_exists = mysql_num_rows($result_tag_exists);
+			   // either way we get the tag's id
+			   if($count_tag_exists!=0){
+			   		$tagRow=mysql_fetch_array($result_tag_exists);
+			   		$id_tag4 = $tagRow['id'];
+			   } else {
+
+			   	// insert tag into tags table
+				$query_tag4 = "INSERT INTO tags(tag) VALUES('$tag4')";
+				$res_tag4 = mysql_query($query_tag4);
+				$id_tag4 = mysql_insert_id();
+				}
+
+				// create entry in table books_tags
+				$query_books_tags4 = "INSERT INTO books_tags(FK_tags, FK_books) VALUES($id_tag4, $id_book)";
+				$res_books_tags4 = mysql_query($query_books_tags4);
+
+		  	}
+
 
 				if ($res_add_book) {
-					$errTyp_add_book = "success";
-					$errMSG_add_book = "Successfully entered! Book is available for users now.";
+					$errTyp = "alert alert-success";
+					$errMSG = "Successfully entered! Book is available for users now.";
 					unset($title);
 					unset($author_FK);
 					unset($genre_FK);
@@ -104,9 +216,9 @@
 					unset($image);
 					
 				} else {
-					$errTyp_add_book = "danger";
-					$errMSG_add_book = "Something went wrong, try again later...";
-					// echo $errMSG_add_book;
+					$errTyp = "alert alert-danger";
+					$errMSG = "Something went wrong, try again later...";
+					// echo $errMSGadd_book;
 				}
    
   			} 
@@ -142,7 +254,7 @@
 				   $count_add_author = mysql_num_rows($result_add_author);
 				   if($count_add_author!=0){
 					    $error_add_author = 1;
-					    $errMSG_add_author = "Provided author is already available.";
+					    $errMSGadd_author = "Provided author is already available.";
 				   }
 				}
 			// if there's no error, continue to save in db
@@ -152,15 +264,15 @@
 				$res_add_author = mysql_query($query_add_author);
 
 				if ($res_add_author) {
-					$errTyp_add_author = "success";
-					$errMSG_add_author = "Successfully entered! Author available in dropdown now.";
-					// echo $errMSG_add_genre;
+					$errTyp = "alert alert-success";
+					$errMSG = "Successfully entered! Author available in dropdown now.";
+					// echo $errMSGadd_genre;
 					unset($add_author_first_name);
 					unset($add_author_family_name);
 				} else {
-					$errTyp_add_author = "danger";
-					$errMSG_add_author = "Something went wrong, try again later...";
-					// echo $errMSG_add_genre;
+					$errTyp = "alert alert-danger";
+					$errMSG = "Something went wrong, try again later...";
+					// echo $errMSGadd_genre;
 				}
    
   			} 
@@ -177,6 +289,7 @@
 		  	if(empty($add_genre)){
 			   $error_add_genre = 1;
 			   $add_genreError = "Please enter a genre.";
+			   $errMSG = "Please enter a genre.";
 		  	} else {
 			   // check whether the genre exist or not
 			   $query_add_genre = "SELECT genre FROM genres WHERE genres.genre='$add_genre'";
@@ -193,76 +306,36 @@
 				$query_add_genre = "INSERT INTO genres(genre) VALUES('$add_genre')";
 				$res_add_genre = mysql_query($query_add_genre);
 
-				if ($res_add_genre) {
-					$errTyp_add_genre = "success";
-					$errMSG_add_genre = "Successfully entered! Genre available in dropdown now.";
-					// echo $errMSG_add_genre;
+			if ($res_add_genre) {
+					$errTyp = "alert alert-success";
+					$errMSG = "Successfully entered! Genre available in dropdown now.";
+					// echo $errMSG;
 					unset($add_genre);
 				} else {
-					$errTyp_add_genre = "danger";
-					$errMSG_add_genre = "Something went wrong, try again later...";
-					// echo $errMSG_add_genre;
-				}
-   
-  			} 
+					$errTyp = "alert alert-danger";
+					$errMSG = "Something went wrong, try again later...";
+					// echo $errMSG;
+				} 
+			}
 		}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome - <?php echo $userRow['first_name']; ?></title>
-    <link rel="icon" href="pictures/logo.png">
-    <!-- style sheet -->
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <!-- jquery and bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight.js"></script>
-    <!-- webfont -->
-    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lobster+Two" rel="stylesheet">
-	
+	<title>Admin Home Page</title>
+	<?php
+require_once('includes/head_tag.php');
+	?>
 </head>
 <body>
 <div class="container">
-	<header class="row shadow">
-		<div class="col-xs-6">
-			<span><img id="logo" src="pictures/logo.png" alt="logo"></span>
-			<span><h1 class="brandfont">Code Library</h1></span>
-		</div>
-		<div class="col-xs-6">
-			<div class="header_right text-right">
-				<?php
-					echo'<div class="">
-					Welcome back, '. $userRow["first_name"].'!<br>
-		       		<a href="logout.php?logout">Sign Out</a>
-		       		</div>';
-		       	?>
-	    	</div>
-		</div>
-	</header>
-		<?php 
-		if( isset($_SESSION['admin']) ) {
-			echo 	'<nav class="text-right" aria-label="Page navigation">
-							<ul class="pagination">
-						    <li class="">
-						      <a href="home_user.php" aria-label="User View">
-						        <span aria-hidden="true">User View</span>
-						      </a>
-						    </li>
-						    <li class="active">
-						      <a href="home_admin.php" aria-label="Admin Panel">
-						        <span aria-hidden="true">Admin Panel</span>
-						      </a>
-						    </li>
-							</ul>
-					</nav>';
-		} 
+
+
+	<?php
+require_once('includes/header.php');
+require_once('includes/switch_admin_view.php');
 	?>
+	
 	<nav class="row margin-top">
 		<div class="col-xs-12">
 			<div class="row">
@@ -286,9 +359,7 @@
 		</div>
 		<form class="col-xs-12" method="post">
 			<?php
-	            if ( isset($_POST['btn_add_book']) ) {
-	              echo '<div class="alert">'.$errMSG_add_book.'</div>';
-	            }
+require_once('includes/alert_box.php');
           	?>
 			<div class="row">
 				<!-- first_row -->
@@ -347,10 +418,10 @@
 				  <span class="text-danger"><?php echo $publishingyearError; ?></span>  
 				  <!-- AGE RECOMMENDATION -->
 				  <h4>Age Recommendation:</h4>
-				  <input type="text" list="list_aage" placeholder="Pick age recommendation from dropdown." name="age" class="form-control" autocomplete="off" />
-					<datalist id="list_aage" name="age">
+				  <input type="text" list="list_age" placeholder="Pick age recommendation from dropdown." name="age" class="form-control" autocomplete="off" />
+					<datalist id="list_age" name="age">
 				  	<?php
-				  	 // select all available authors
+				  	 // select all available entries
  						$res_age=mysql_query("SELECT * FROM age_recommendations");
  						
  						
@@ -368,6 +439,80 @@
 				  <span class="text-danger"><?php echo $imageError; ?></span> 
 				 
 				</div>
+
+				<div class="col-xs-12">
+				<!-- TAGS -->
+				<hr>
+					<h4 class="text-center">Choose up to 4 tags for this book to improve search results.</h4>
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+						<!-- TAG 1 -->
+							 <input type="text" list="list_tag1" placeholder="Optional: enter a tag or choose from dropdown." name="tag1" class="form-control margin-top" autocomplete="on" />
+							<datalist id="list_tag1" name="tag1">
+<?php
+ // select all available tags
+	$res_tag=mysql_query("SELECT * FROM tags");
+	
+	
+	while($tagRow=mysql_fetch_array($res_tag)){
+		$tag_db = $tagRow['tag'];
+
+		echo "<option value='".$tag_db."'>".$tag_db."</option>";
+	}
+?>
+						  </datalist>
+
+						  <!-- TAG 2 -->
+							 <input type="text" list="list_tag2" placeholder="Optional: enter a tag or choose from dropdown." name="tag2" class="form-control margin-top" autocomplete="on" />
+							<datalist id="list_tag2" name="tag2">
+<?php
+ // select all available tags
+	$res_tag=mysql_query("SELECT * FROM tags");
+	
+	
+	while($tagRow=mysql_fetch_array($res_tag)){
+		$tag_db = $tagRow['tag'];
+
+		echo "<option value='".$tag_db."'>".$tag_db."</option>";
+	}
+?>
+
+						  </datalist>
+						</div>
+						<div class="col-xs-12 col-md-6">
+  				  <!-- TAG 3 -->
+							 <input type="text" list="list_tag3" placeholder="Optional: enter a tag or choose from dropdown." name="tag3" class="form-control margin-top" autocomplete="on" />
+							<datalist id="list_tag3" name="tag3">
+<?php
+ // select all available tags
+	$res_tag=mysql_query("SELECT * FROM tags");
+	
+	
+	while($tagRow=mysql_fetch_array($res_tag)){
+		$tag_db = $tagRow['tag'];
+
+		echo "<option value='".$tag_db."'>".$tag_db."</option>";
+	}
+?>
+						  </datalist>
+				  <!-- TAG 4 -->
+							 <input type="text" list="list_tag4" placeholder="Optional: enter a tag or choose from dropdown." name="tag4" class="form-control margin-top" autocomplete="on" />
+							<datalist id="list_tag4" name="tag4">
+<?php
+ // select all available tags
+	$res_tag=mysql_query("SELECT * FROM tags");
+	
+	
+	while($tagRow=mysql_fetch_array($res_tag)){
+		$tag_db = $tagRow['tag'];
+
+		echo "<option value='".$tag_db."'>".$tag_db."</option>";
+	}
+?>
+						  </datalist>
+						</div>
+					</div>
+				</div>
 				<div class="col-xs-12">
 					 <!-- SUBMIT -->
          			<hr />
@@ -381,11 +526,7 @@
 			<hr>
 		</div>
 		<form class="col-xs-12" method="post">
-			<?php
-	            if ( isset($_POST['btn_add_author']) ) {
-	              echo '<div class="alert">'.$errMSG_add_author.'</div>';
-	            }
-          	?>
+
 			<div class="row">
 				<!-- first_row -->
 				<div class="col-xs-12 col-md-6">
@@ -416,11 +557,7 @@
 			<hr>
 		</div>
 		<form class="col-xs-12" method="post">
-			<?php
-	            if ( isset($_POST['btn_add_genre']) ) {
-	              echo '<div class="alert">'.$errMSG_add_genre.'</div>';
-	            }
-          	?>
+
 			<div class="row">
 				<!-- first_row -->
 				<div class="col-xs-12 col-md-6">
@@ -444,11 +581,9 @@
 		</form>
 	</section>
 	<!-- footer -->
-	<div class="row margin-top ">
-        <div class="col-xs-12 text-center shadow panel panel-default">
-            All rights reserved for Nati
-        </div>
-    </div>
+	<?php
+require_once('includes/footer.php');
+	?>
 	 
 </div>
 </body>

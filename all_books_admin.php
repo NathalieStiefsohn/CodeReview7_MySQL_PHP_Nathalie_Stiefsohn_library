@@ -1,16 +1,5 @@
 <?php
- ob_start();
- session_start();
- require_once 'dbconnect.php';
- 
- // if session is not set this will redirect to login page
- if( !isset($_SESSION['admin']) ) {
-  header("Location: index.php");
-  exit;
- }
- // select logged-in users detail
- $res=mysql_query("SELECT * FROM users WHERE id=".$_SESSION['admin']);
- $userRow=mysql_fetch_array($res);
+require_once('includes/start_session_admin.php');
 ?>
 <?php
 	$book_id = $_GET['book_id'];
@@ -39,59 +28,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Library Administration</title>
-	<link rel="icon" href="pictures/logo.png">
-    <!-- style sheet -->
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <!-- jquery and bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight.js"></script>
-    <!-- webfont -->
-    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lobster+Two" rel="stylesheet">
-	
+	<title>All Books</title>
+	<?php
+require_once('includes/head_tag.php');
+	?>
 </head>
 <body>
 <div class="container">
-	<header class="row shadow">
-		<div class="col-xs-6">
-			<span><img id="logo" src="pictures/logo.png" alt="logo"></span>
-			<span><h1 class="brandfont">Code Library</h1></span>
-		</div>
-		<div class="col-xs-6">
-			<div class="header_right text-right">
-				<?php
-					echo'<div class="">
-					Welcome back, '. $userRow["first_name"].'!<br>
-		       		<a href="logout.php?logout">Sign Out</a>
-		       		</div>';
-		       	?>
-	    	</div>
-		</div>
-	</header>
-		<?php 
-		if( isset($_SESSION['admin']) ) {
-			echo 	'<nav class="text-right" aria-label="Page navigation">
-							<ul class="pagination">
-						    <li class="">
-						      <a href="home_user.php" aria-label="User View">
-						        <span aria-hidden="true">User View</span>
-						      </a>
-						    </li>
-						    <li class="active">
-						      <a href="home_admin.php" aria-label="Admin Panel">
-						        <span aria-hidden="true">Admin Panel</span>
-						      </a>
-						    </li>
-							</ul>
-					</nav>';
-		} 
+
+	<?php
+require_once('includes/header.php');
+require_once('includes/switch_admin_view.php');
 	?>
+
 	<nav class="row margin-top">
 		<div class="col-xs-12">
 			<div class="row">
@@ -116,21 +65,12 @@
 			<hr>
 		</div>
 		
-		<form class="col-xs-6 col-xs-offset-3" role="search" method="get">
-    		<div class="input-group">
-    			<input type="search" class="form-control" name="search" placeholder="Search for a book">
-        		<div class="input-group-btn">
-            		<button class="btn btn-default" name="btn-search" id="btn-search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-
-        		</div>
-    		</div>
-    		<hr>		
-		</form>
+		<?php
+require_once('includes/search_bar.php');
+		?>
 
 		<?php
-			echo 	'<div class="col-xs-12 '.$errTyp.' text-center">
-						<h3>'.$errMSG.'</h3>
-					</div>';
+require_once('includes/alert_box.php');
 		?>
 		
 		<div class="col-xs-12">
@@ -139,12 +79,12 @@
 			      <tr>
 			        <th>Title</th>
 			        <th>Author</th>
-			        <th>Publishing year</th>
+			        <th>Publishing <br>year</th>
 			        <th>Genre</th>
-			        <th>Age Class</th>
+			        <th>Age <br>Class</th>
 			        <th>Status</th>
 			        <th>Username</th>
-			        <th>Cancel Reservation</th>
+			        <th>Cancel <br>Reservation</th>
 			      </tr>
 			    </thead>
 			    <tbody>
@@ -152,15 +92,19 @@
 				 // select all available books
 				 
 				if ( isset($_GET['btn-search']) ){
+					
 					$search = trim($_GET['search']);
 			 		$search = strip_tags($search);
 			  		$search = htmlspecialchars($search);
+			  		// MYSQL query to get all data which is connected to the search key word
 					$res_book=mysql_query("SELECT 
 					title, authors.first_name, authors.family_name, publishing_year, genre, age, available, books.id as books_id, username
 					FROM books 
 					JOIN authors ON books.FK_authors=authors.id
 					JOIN genres ON books.FK_genres=genres.id
 					JOIN age_recommendations ON books.FK_age_recommendations=age_recommendations.id
+					JOIN books_tags ON books.id=books_tags.FK_books
+					JOIN tags ON books_tags.FK_tags=tags.id
 					LEFT JOIN borrows ON books.id = borrows.FK_books
                     LEFT JOIN users ON borrows.FK_users=users.id 
  					
@@ -168,24 +112,15 @@
 					OR authors.first_name LIKE '%$search%'
 					OR authors.family_name LIKE '%$search%'
 					OR genre LIKE '%$search%'
+					OR publishing_year LIKE '%$search%'
+					OR tag LIKE '%$search%'
 					ORDER BY title ASC");
 					// get telephone number
 					$res_library=mysql_query("SELECT * FROM libraries");
 					$row_library=mysql_fetch_array($res_library);
 					$telephone = $row_library['telephone'];
 
-					$count_search = mysql_num_rows($res_book);
-					if ($count_search == 1){
-						echo "<h4 class='text-center'>We found ".$count_search." result for '".$search."'.</h4> <hr>";
-					} else if ($count_search == 0) {
-					echo '<div class="alert alert-danger">
-							<h4 class="text-center">Unfortunately there are no results for "'.$search.'". <br><br>Please call Code Library for further information.
-							<br>
-							Telephone Number: '.$telephone.'</h4> 
-						</div><hr>';
-					} else {
-						echo "<h4 class='text-center'>We found ".$count_search." results for '".$search."'.</h4> <hr>";
-					}
+require_once('includes/count_search_result.php');
 					
 			  		while($bookRow=mysql_fetch_array($res_book)){
 				  		$title = $bookRow['title'];
@@ -224,7 +159,7 @@
 
 				  		
 						echo			'<form method="post" action="all_books_admin.php?book_id='.$book_id.'">
-											<input type="submit" class="btn btn-primary" value="Cancel Reservation" id="btn-cancel_reservation" name="btn-cancel_reservation">
+											<input type="submit" class="btn btn-primary" value="Cancel" id="btn-cancel_reservation" name="btn-cancel_reservation">
 										</form>
 						  	';
 					  	}
@@ -281,7 +216,7 @@
 
 				  		
 						echo			'<form method="post" action="all_books_admin.php?book_id='.$book_id.'">
-											<input type="submit" class="btn btn-primary" value="Cancel Reservation" id="btn-cancel_reservation" name="btn-cancel_reservation">
+											<input type="submit" class="btn btn-primary" value="Cancel" id="btn-cancel_reservation" name="btn-cancel_reservation">
 										</form>
 						  	';
 					  	}
@@ -304,11 +239,9 @@
 
 	</section>
 	<!-- footer -->
-	<div class="row margin-top ">
-        <div class="col-xs-12 text-center shadow panel panel-default">
-            All rights reserved for Nati
-        </div>
-    </div>
+	<?php
+require_once('includes/footer.php');
+	?>
 	 
 </div>
 </body>

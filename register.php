@@ -16,7 +16,6 @@
 
 
  if ( isset($_POST['btn-signup']) ) {
-  // echo " start: $error";
   // sanitize user input to prevent sql injection
   $username = trim($_POST['username']);
   $username = strip_tags($username);
@@ -38,6 +37,7 @@
   $family_name = strip_tags($family_name);
   $family_name = htmlspecialchars($family_name);
 
+  $avatar = $_POST['avatar'];
 
   // basic username validation
   if (empty($username)) {
@@ -109,21 +109,21 @@
   }
       // echo " familyname: $error<br>";
 
-  // // DOB validation
-  // if (empty($DOB)){
-  //  $error = 1;
-  //  $DOBError = "Please enter your date of birth.";
-  // }
-  //       echo " DOB: $error<br>";
+  // Avatar validation
+  if (empty($avatar)){
+   $error = 1;
+   $avatarError = "Please choose an avatar.";
+  }
+        // echo " avatar: $error<br>";
 
   // if there's no error, continue to signup
   if( $error == 0 ) {
    // echo "no error";
-   $query = "INSERT INTO users(username,email,password,first_name,family_name) VALUES('$username','$email','$password','$first_name','$family_name')";
+   $query = "INSERT INTO users(username,email,password,first_name,family_name, FK_avatars) VALUES('$username','$email','$password','$first_name','$family_name', $avatar)";
    $res = mysql_query($query);
    
    if ($res) {
-    $errTyp = "success";
+    $errTyp = "alert-success";
     $errMSG = "Successfully registered, you may login now";
     // echo $errMSG;
     unset($username);
@@ -133,7 +133,7 @@
     unset($family_name);
     // unset($DOB);
    } else {
-    $errTyp = "danger";
+    $errTyp = "alert-danger";
     $errMSG = "Something went wrong, try again later...";
     // echo $errMSG;
    }
@@ -161,6 +161,14 @@
     <!-- webfont -->
     <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lobster+Two" rel="stylesheet">
+    <style>
+      .avatar {
+        width: 120px;
+        height: 120px;
+        margin: 4px;
+      }
+
+    </style>
 </head>
 <body>
     <div class="container">
@@ -206,11 +214,31 @@
           <h4>Family name:</h4>
           <input type="text" id="family_name" name="family_name" class="form-control" placeholder="Enter family name" />
           <span class="text-danger"><?php echo $familynameError; ?></span> 
-          <!-- DOB -->
-          <!-- <h4>Date of Birth:</h4> -->
-          <!-- <input type="date" id="dob" name="dob" class="form-control" placeholder="Enter Date of Birth"/> -->
-          <!-- <span class="text-danger"><?php echo $DOBnameError; ?></span>  -->
-          <!-- SUBMIT -->
+
+          
+      </div>
+      <div class="col-xs-12 text-center">
+        <hr>
+        <h4 class="">Pick an avatar:</h4>
+        <hr>
+
+        <?php
+          $query_avatar = "SELECT * FROM avatars";
+          $res_avatar = mysql_query($query_avatar);
+
+          while($avatarRow=mysql_fetch_array($res_avatar)){
+            $avatar = $avatarRow['avatar'];
+            $avatar_id = $avatarRow['id'];
+
+            echo    '<label class="radio-inline">
+                      <input type="radio" value="'.$avatar_id.'" name="avatar"><img class="img-circle avatar" src="'.$avatar.'" alt="avatar">
+                    </label>';
+          }
+        ?>
+        <div class="text-center text-danger margin-top"><?php echo $avatarError; ?></div>  
+      </div>
+      <div class="col-xs-12">
+        <!-- SUBMIT -->
           <hr />
           <button type="submit" id="btn-signup" class="btn btn-block btn-primary" name="btn-signup">Sign Up</button>
       </div>
