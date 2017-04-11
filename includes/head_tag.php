@@ -1,3 +1,4 @@
+
 	
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,12 +19,136 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
 	<style type="text/css">
-		.book_image {
+
+		html, body {
+		  height: 100%;
+		}
+
+
+		#wrap {
+		  min-height: 100%;
+		}
+
+		#main {
+		  overflow:auto;
+		  padding-bottom:50px; /* this needs to be bigger than footer height*/
+		}
+
+		.footer {
+		  position: relative;
+		  margin-top: -50px; /* negative value of footer height */
+		  height: 50px;
+		  clear:both;
+		  padding-top:20px;
+		} 
+		
+
+
+@media(max-width:500px){
+	body{
+		/*background-color: black;*/
+	}
+	.book_image {
+			height: 100px;
+			width: 33%;	
+			display: flex;
+			align-items: right;
+			/*border:1px solid;*/
+
+		}
+}
+@media(min-width:500px){
+	body{
+		/*background-color: yellow;*/
+	}
+	.book_image {
+			height: 120px;
+			width: 33%;	
+			display: flex;
+			align-items: right;
+			/*border:1px solid;*/
+
+		}
+}
+@media(min-width:600px){
+	body{
+		/*background-color: blue;*/
+	}
+	.book_image {
 			height: 150px;
 			width: 33%;	
 			display: flex;
-			align-items: center;
+			align-items: right;
+			/*border:1px solid;*/
+
 		}
+}
+@media(min-width:700px){
+	body{
+		/*background-color:black;*/
+	}
+	.book_image {
+			height: 200px;
+			width: 33%;	
+			display: flex;
+			align-items: right;
+			/*border:1px solid;*/
+
+		}
+}
+@media(min-width:768px){
+	body{
+		/*background-color:red;*/
+	}
+	.book_image {
+			height: 190px;
+			width: 33%;	
+			display: flex;
+			align-items: right;
+			/*border:1px solid;*/
+
+		}
+}
+@media(min-width:992px){
+	body{
+		/*background-color:green;*/
+	}
+	.book_image {
+			height: 110px;
+			width: 33%;	
+			display: flex;
+			align-items: center;
+			/*border:1px solid;*/
+		}
+}
+@media(min-width:1200px){
+	body{
+		/*background-color:yellow;*/
+	}
+	.book_image {
+			height: 150px;
+			width: 33%;	
+			display: flex;
+			align-items: right;
+			/*border:1px solid;*/
+
+		}
+}
+
+
+
+		.reduce_top_margin{
+			/*margin-top: -60px;*/
+			/*margin-right: 20px;*/
+			top:-10px;
+			right:20px;
+			position: absolute;
+		}
+
+		.header_margin {
+			margin-top: 100px;
+		}
+		
 		.book_image img {
 			height: 100%;
 			width: 100%;
@@ -44,7 +169,7 @@
 			width: 100%;
 			/*border: 1px solid;*/
 			padding: 10px;
-			height: 60px;
+			height: 70px;
 		}
 		.selected_book_header  {
 			width: 100%;

@@ -1,4 +1,6 @@
-<header class="row shadow">
+
+
+<header class="row shadow header_margin">
 		<div class="col-xs-12 col-sm-6">
 			<span><img id="logo" src="pictures/logo.png" alt="logo"></span>
 			<span><h1 class="brandfont">Code Library</h1></span>
@@ -20,18 +22,4 @@
 		    	</div>
 	    	</div>
 		</div>
-<!-- 		<div class="visible-xs navbar navbar-default">
-		  
-		   <ul class="nav nav-pills nav-stacked">
-		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-		          <ul class="dropdown-menu nav nav-pills nav-stacked" role="menu">
-		            	<li role="presentation" class=""><a href="home_admin.php">Add Book/Author/Genre</a></li>
-						<li role="presentation"><a href="library_admin.php">Opening Hours</a></li>
-						<li role="presentation"><a href="all_books_admin.php">All Books</a></li>
-						<li role="presentation"><a href="all_users_admin.php">All Users</a></li>
-		          </ul>
-		        </li>
-		  </ul>
-  		</div> -->
-	</header>
+</header>

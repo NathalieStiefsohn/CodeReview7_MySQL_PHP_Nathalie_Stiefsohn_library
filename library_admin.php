@@ -39,29 +39,40 @@ require_once('includes/head_tag.php');
 	?>
 </head>
 <body>
-<div class="container">
+<div id="wrap">
+  <div id="main" class="container clear-top">
 
+	<div class="navbar navbar-inverse navbar-fixed-top">	
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle pull-left" data-toggle="collapse" data-target=".navbar-collapse">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <!-- <a class="navbar-brand" href="#">Brand</a> -->
 
-	<?php
-require_once('includes/header.php');
+	    </div>
+	    <div class="collapse navbar-collapse">
+	      <ul class="nav navbar-nav">
+	        <li class=""><a href="home_admin.php">Add Book</a></li>
+	        <li class="active"><a href="library_admin.php">Opening Hours</a></li>
+	        <li class=""><a href="all_books_admin.php">All Books</a></li>
+	        <li class=""><a href="all_users_admin.php">All Users</a></li>
+	      </ul>
+
+	    </div><!--/.nav-collapse -->
+			        	<?php
 require_once('includes/switch_admin_view.php');
-	?>
+		?>
 
-	<nav class="row margin-top">
-		<div class="col-xs-12">
-			<div class="row">
-				<div class="col-xs-12 text-center">
-					<ul class="nav nav-tabs">
-						<li role="presentation"><a href="home_admin.php">Add Book/Author/Genre</a></li>
-						<li role="presentation" class="active"><a href="library_admin.php">Opening Hours</a></li>
-						<li role="presentation"><a href="all_books_admin.php">All Books</a></li>
-						<li role="presentation"><a href="all_users_admin.php">All Users</a></li>
-					</ul>
-				</div>
-				
-			</div>
-		</div>
-	</nav>
+	  </div>
+
+
+
+		<?php
+require_once('includes/header.php');
+		?>
+
 	<!-- main -->
 	<section class="row">
 		<div class="col-xs-12">
@@ -97,12 +108,14 @@ require_once('includes/alert_box.php');
 			</div>
 		</form>
 	</section>
+<!-- end wrapper to put footer on the bottom of the page -->
+  </div>
+</div>
 	<!-- footer -->
 	<?php
 require_once('includes/footer.php');
 	?>
 	 
-</div>
 </body>
 </html>
 <?php ob_end_flush(); ?>
