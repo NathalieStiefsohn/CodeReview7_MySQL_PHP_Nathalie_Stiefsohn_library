@@ -42,7 +42,9 @@
 		  padding-top:20px;
 		} 
 		
-
+		.margin-left{
+			margin-left:4%;
+		}
 
 @media(max-width:500px){
 	body{

@@ -152,9 +152,11 @@ require_once('includes/header.php');
 							    </div>
 							  </div>';
 		  	if ($availability == 1){
-			  	echo '<div class="col-xs-12 col-md-4 text-center alert alert-info margin-top"> 
+			  	echo '<div class="col-xs-12 col-md-4"> 
+	  							<div class="alert center-block alert-info text-center margin-top margin-left">
 								  <h4>Would you like to make a reservation for this book?</h4>
 								  <input type="submit" class="btn btn-primary" value="Make reserveration now" id="btn-reservation" name="btn-reservation">
+							  	</div>
 							  </div>	
 
 							</div
@@ -162,9 +164,11 @@ require_once('includes/header.php');
 					</form>
 				</div>';
 	  		} else {
-	  			echo '<div class="col-xs-12 col-md-4 text-center alert alert-danger margin-top"> 
+	  			echo '<div class="col-xs-12 col-md-4"> 
+	  							<div class="alert center-block alert-danger text-center margin-top margin-left">
 								  <h4> This book is currently not available. <br> Please try again later</h4>
 								  
+							  	</div>
 							  </div>	
 
 							</div
