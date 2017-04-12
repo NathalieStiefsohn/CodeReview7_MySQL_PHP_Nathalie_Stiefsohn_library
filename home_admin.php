@@ -368,10 +368,11 @@ require_once('includes/head_tag.php');
 			<h2 class="brandfont text-center">Add a new Book</h2>
 			<hr>
 		</div>
-		<form class="col-xs-12" method="post">
 			<?php
 require_once('includes/alert_box.php');
           	?>
+		<form class="col-xs-12" method="post">
+
 			<div class="row">
 				<!-- first_row -->
 				<div class="col-xs-12 col-md-6">

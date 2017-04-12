@@ -44,17 +44,18 @@
    $res_user=mysql_query("SELECT id, username, first_name, password FROM users WHERE username='$username'");
    $row_user=mysql_fetch_array($res_user);
    $count_user = mysql_num_rows($res_user); // if uname/pass correct it returns must be 1 row
-   echo $count_user;
+   // echo $count_user;
    // admin
    $res_admin=mysql_query("SELECT users.id, username, first_name, password FROM users JOIN admins ON users.id = admins.FK_users WHERE username='$username'");
    $row_admin=mysql_fetch_array($res_admin);
    $count_admin = mysql_num_rows($res_admin); // if uname/pass correct it returns must be 1 row
-   echo $count_admin;
+   // echo $count_admin;
 
    if( $count_user == 1 && $row_user['password']==$password ) {
     $_SESSION['user'] = $row_user['id'];
     header("Location: home_user.php");
    } else {
+    $errTyp = "alert alert-danger";
     $errMSG = "Incorrect credentials. Try again...";
    }
 
@@ -103,11 +104,9 @@
           <h2>Sign In.</h2>
           <hr />
                  
-          <?php
-            if ( isset($errMSG) ) {
-            echo $errMSG;
-            } 
-          ?>
+      <?php
+require_once('includes/alert_box.php');
+            ?>
       </div>
       <div class="col-xs-12 col-md-6">               
                
